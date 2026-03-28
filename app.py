@@ -4,10 +4,19 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import random
 
 random.seed(42)
 np.random.seed(42)
+
+PURPLE = '#1D1160'
+TEAL = '#00788C'
+LIGHT_BLUE = '#0085CA'
+LIGHT_TEAL = '#00B2CC'
+SILVER = '#C8C9C7'
+WHITE = '#FFFFFF'
 
 @st.cache_resource
 def train_model():
@@ -57,13 +66,15 @@ def train_model():
     model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
 
-    return model, le_neighborhood, le_stress, features
+    return model, le_neighborhood, le_stress, features, df
 
-model, le_neighborhood, le_stress, features = train_model()
+model, le_neighborhood, le_stress, features, df = train_model()
 
-st.title("Charlotte Data Center Grid Stress Predictor")
-st.markdown("### Will a proposed data center stress Charlotte's power grid?")
-st.markdown("This tool uses a machine learning model to predict grid stress level based on proposed data center characteristics. Dataset is synthetically generated using real-world grid engineering parameters.")
+st.markdown(f"""
+    <h1 style='color:{PURPLE}'>Charlotte Data Center Grid Stress Predictor</h1>
+    <p style='color:{TEAL}; font-size:18px;'>Adjust the inputs below to see how a proposed data center would impact Charlotte's power grid in real time.</p>
+    <p style='font-size:13px; color:gray;'>Dataset is synthetically generated using real-world grid engineering parameters.</p>
+""", unsafe_allow_html=True)
 
 st.divider()
 
@@ -84,27 +95,66 @@ with col2:
 
 st.divider()
 
-if st.button("Predict Grid Stress", type="primary"):
-    hood_encoded = le_neighborhood.transform([neighborhood])[0]
-    input_data = pd.DataFrame([[hood_encoded, size_mw, grid_load, distance, density, existing]],
-                               columns=features)
-    prediction = model.predict(input_data)[0]
-    stress_label = le_stress.inverse_transform([prediction])[0]
-    proba = model.predict_proba(input_data)[0]
-    confidence = max(proba) * 100
+hood_encoded = le_neighborhood.transform([neighborhood])[0]
+input_data = pd.DataFrame([[hood_encoded, size_mw, grid_load, distance, density, existing]],
+                           columns=features)
+prediction = model.predict(input_data)[0]
+stress_label = le_stress.inverse_transform([prediction])[0]
+proba = model.predict_proba(input_data)[0]
+confidence = max(proba) * 100
 
-    st.markdown("## Result")
+if stress_label == "High":
+    st.markdown(f"<h2 style='color:{LIGHT_BLUE}'>HIGH Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
+    st.info("This proposal would likely place significant strain on Charlotte's power grid and may require major infrastructure upgrades before approval.")
+elif stress_label == "Medium":
+    st.markdown(f"<h2 style='color:{TEAL}'>MEDIUM Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
+    st.info("This proposal would place moderate strain on the grid. Further engineering review is recommended.")
+else:
+    st.markdown(f"<h2 style='color:{LIGHT_TEAL}'>LOW Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
+    st.info("This proposal appears manageable for the existing grid infrastructure in this area.")
 
-    if stress_label == "High":
-        st.error(f"HIGH Grid Stress — {confidence:.1f}% confidence")
-        st.markdown("This proposal would likely place significant strain on Charlotte's power grid and may require major infrastructure upgrades before approval.")
-    elif stress_label == "Medium":
-        st.warning(f"MEDIUM Grid Stress — {confidence:.1f}% confidence")
-        st.markdown("This proposal would place moderate strain on the grid. Further engineering review is recommended.")
-    else:
-        st.success(f"LOW Grid Stress — {confidence:.1f}% confidence")
-        st.markdown("This proposal appears manageable for the existing grid infrastructure in this area.")
+st.divider()
 
-    st.markdown("### Confidence Breakdown")
+col3, col4 = st.columns(2)
+
+with col3:
+    st.markdown(f"<p style='color:{PURPLE}; font-weight:bold; font-size:16px;'>Confidence Breakdown</p>", unsafe_allow_html=True)
+    stress_colors = {'High': LIGHT_BLUE, 'Low': LIGHT_TEAL, 'Medium': TEAL}
     for label, prob in zip(le_stress.classes_, proba):
-        st.progress(int(prob * 100), text=f"{label}: {prob*100:.1f}%")
+        st.markdown(f"<span style='color:{stress_colors[label]}; font-weight:bold'>{label}</span>: {prob*100:.1f}%", unsafe_allow_html=True)
+        st.progress(int(prob * 100))
+
+with col4:
+    st.markdown(f"<p style='color:{PURPLE}; font-weight:bold; font-size:16px;'>How your scenario compares</p>", unsafe_allow_html=True)
+
+    dot_color_map = {'Low': LIGHT_TEAL, 'Medium': TEAL, 'High': LIGHT_BLUE}
+    dot_colors = [dot_color_map[s] for s in df['grid_stress_level']]
+
+    fig, ax = plt.subplots(figsize=(5, 3.5))
+    fig.patch.set_facecolor('#0a0a0a')
+    ax.set_facecolor('#0a0a0a')
+
+    ax.scatter(df['data_center_size_mw'], df['existing_grid_load_pct'],
+               c=dot_colors, alpha=0.4, s=20)
+
+    ax.scatter(size_mw, grid_load, color=WHITE, s=150, zorder=5,
+               edgecolors=LIGHT_TEAL, linewidths=2)
+
+    ax.set_xlabel('Data Center Size (MW)', color=SILVER, fontsize=9)
+    ax.set_ylabel('Grid Load (%)', color=SILVER, fontsize=9)
+    ax.tick_params(colors=SILVER, labelsize=8)
+    for spine in ax.spines.values():
+        spine.set_edgecolor('#333333')
+
+    patches = [mpatches.Patch(color=LIGHT_TEAL, label='Low'),
+               mpatches.Patch(color=TEAL, label='Medium'),
+               mpatches.Patch(color=LIGHT_BLUE, label='High')]
+    ax.legend(handles=patches, fontsize=7, facecolor='#1a1a1a',
+              labelcolor=SILVER, edgecolor='#333333')
+
+    plt.tight_layout()
+    st.pyplot(fig)
+    plt.close()
+
+st.divider()
+st.markdown(f"<p style='color:gray; font-size:12px;'>Built by Brian Parker — BS Artificial Intelligence, UNC Charlotte</p>", unsafe_allow_html=True)
