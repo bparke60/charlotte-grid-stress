@@ -11,27 +11,16 @@ import random
 st.set_page_config(
     page_title="Charlotte Grid Stress Predictor",
     page_icon="⚡",
-    layout="wide",
-    initial_sidebar_state="collapsed"
+    layout="wide"
 )
-
-st.markdown("""
-    <style>
-    .stApp { background-color: #FFFFFF; }
-    h1, h2, h3, p, label, div { color: #1D1160; }
-    .stMarkdown p { color: #1D1160; }
-    </style>
-""", unsafe_allow_html=True)
 
 random.seed(42)
 np.random.seed(42)
 
-PURPLE = '#1D1160'
-TEAL = '#00788C'
-LIGHT_BLUE = '#0085CA'
-LIGHT_TEAL = '#00B2CC'
-SILVER = '#C8C9C7'
-WHITE = '#FFFFFF'
+BLUE = '#0085CA'
+DARK_BLUE = '#005A8E'
+LIGHT_BLUE = '#00B2CC'
+SILVER = '#888888'
 
 @st.cache_resource
 def train_model():
@@ -85,28 +74,26 @@ def train_model():
 
 model, le_neighborhood, le_stress, features, df = train_model()
 
-st.markdown(f"""
-    <h1 style='color:{PURPLE}'>⚡ Charlotte Data Center Grid Stress Predictor</h1>
-    <p style='color:{TEAL}; font-size:18px;'>Adjust the inputs below to see how a proposed data center would impact Charlotte's power grid in real time.</p>
-    <p style='font-size:13px; color:gray;'>Dataset is synthetically generated using real-world grid engineering parameters.</p>
-""", unsafe_allow_html=True)
+st.title("⚡ Charlotte Data Center Grid Stress Predictor")
+st.markdown(f"<p style='color:{BLUE}; font-size:18px;'>Adjust the inputs to see how a proposed data center would impact Charlotte's power grid in real time.</p>", unsafe_allow_html=True)
+st.caption("Dataset is synthetically generated using real-world grid engineering parameters.")
 
 st.divider()
 
 col1, col2 = st.columns(2)
 
 with col1:
-    neighborhood = st.selectbox("Neighborhood", sorted([
+    neighborhood = st.selectbox("📍 Neighborhood", sorted([
         'University City', 'South End', 'NoDa', 'Steele Creek', 'Ballantyne',
         'East Charlotte', 'Mooresville', 'Matthews', 'Huntersville', 'Concord'
     ]))
-    size_mw = st.slider("Data Center Size (MW)", min_value=10, max_value=500, value=150, step=10)
-    grid_load = st.slider("Existing Grid Load (%)", min_value=40, max_value=95, value=65, step=1)
+    size_mw = st.slider("🏗️ Data Center Size (MW)", min_value=10, max_value=500, value=150, step=10)
+    grid_load = st.slider("⚡ Existing Grid Load (%)", min_value=40, max_value=95, value=65, step=1)
 
 with col2:
-    distance = st.slider("Distance to Nearest Substation (miles)", min_value=0.5, max_value=15.0, value=5.0, step=0.5)
-    density = st.slider("Residential Density (1-10)", min_value=1, max_value=10, value=5, step=1)
-    existing = st.slider("Existing Data Centers Nearby", min_value=0, max_value=8, value=2, step=1)
+    distance = st.slider("📏 Distance to Nearest Substation (miles)", min_value=0.5, max_value=15.0, value=5.0, step=0.5)
+    density = st.slider("🏘️ Residential Density (1-10)", min_value=1, max_value=10, value=5, step=1)
+    existing = st.slider("🖥️ Existing Data Centers Nearby", min_value=0, max_value=8, value=2, step=1)
 
 st.divider()
 
@@ -119,30 +106,29 @@ proba = model.predict_proba(input_data)[0]
 confidence = max(proba) * 100
 
 if stress_label == "High":
-    st.markdown(f"<h2 style='color:{LIGHT_BLUE}'>🔴 HIGH Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
-    st.error("This proposal would likely place significant strain on Charlotte's power grid and may require major infrastructure upgrades before approval.")
+    st.error(f"🔴 HIGH Grid Stress — {confidence:.1f}% confidence")
+    st.markdown("This proposal would likely place significant strain on Charlotte's power grid and may require major infrastructure upgrades before approval.")
 elif stress_label == "Medium":
-    st.markdown(f"<h2 style='color:{TEAL}'>🟡 MEDIUM Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
-    st.warning("This proposal would place moderate strain on the grid. Further engineering review is recommended.")
+    st.warning(f"🟡 MEDIUM Grid Stress — {confidence:.1f}% confidence")
+    st.markdown("This proposal would place moderate strain on the grid. Further engineering review is recommended.")
 else:
-    st.markdown(f"<h2 style='color:{LIGHT_TEAL}'>🟢 LOW Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
-    st.success("This proposal appears manageable for the existing grid infrastructure in this area.")
+    st.success(f"🟢 LOW Grid Stress — {confidence:.1f}% confidence")
+    st.markdown("This proposal appears manageable for the existing grid infrastructure in this area.")
 
 st.divider()
 
 col3, col4 = st.columns(2)
 
 with col3:
-    st.markdown(f"<p style='color:{PURPLE}; font-weight:bold; font-size:16px;'>Confidence Breakdown</p>", unsafe_allow_html=True)
-    stress_colors = {'High': LIGHT_BLUE, 'Low': LIGHT_TEAL, 'Medium': TEAL}
+    st.subheader("Confidence Breakdown")
+    stress_colors = {'High': DARK_BLUE, 'Low': LIGHT_BLUE, 'Medium': BLUE}
     for label, prob in zip(le_stress.classes_, proba):
         st.markdown(f"<span style='color:{stress_colors[label]}; font-weight:bold'>{label}</span>: {prob*100:.1f}%", unsafe_allow_html=True)
         st.progress(int(prob * 100))
 
 with col4:
-    st.markdown(f"<p style='color:{PURPLE}; font-weight:bold; font-size:16px;'>How your scenario compares</p>", unsafe_allow_html=True)
-
-    dot_color_map = {'Low': LIGHT_TEAL, 'Medium': TEAL, 'High': LIGHT_BLUE}
+    st.subheader("How your scenario compares")
+    dot_color_map = {'Low': LIGHT_BLUE, 'Medium': BLUE, 'High': DARK_BLUE}
     dot_colors = [dot_color_map[s] for s in df['grid_stress_level']]
 
     fig, ax = plt.subplots(figsize=(5, 3.5))
@@ -151,25 +137,24 @@ with col4:
 
     ax.scatter(df['data_center_size_mw'], df['existing_grid_load_pct'],
                c=dot_colors, alpha=0.4, s=20)
+    ax.scatter(size_mw, grid_load, color='white', s=150, zorder=5,
+               edgecolors=BLUE, linewidths=2)
 
-    ax.scatter(size_mw, grid_load, color=PURPLE, s=150, zorder=5,
-               edgecolors=LIGHT_TEAL, linewidths=2)
-
-    ax.set_xlabel('Data Center Size (MW)', color=PURPLE, fontsize=9)
-    ax.set_ylabel('Grid Load (%)', color=PURPLE, fontsize=9)
-    ax.tick_params(colors=PURPLE, labelsize=8)
+    ax.set_xlabel('Data Center Size (MW)', color=DARK_BLUE, fontsize=9)
+    ax.set_ylabel('Grid Load (%)', color=DARK_BLUE, fontsize=9)
+    ax.tick_params(colors=DARK_BLUE, labelsize=8)
     for spine in ax.spines.values():
         spine.set_edgecolor('#CCCCCC')
 
-    patches = [mpatches.Patch(color=LIGHT_TEAL, label='Low'),
-               mpatches.Patch(color=TEAL, label='Medium'),
-               mpatches.Patch(color=LIGHT_BLUE, label='High')]
+    patches = [mpatches.Patch(color=LIGHT_BLUE, label='Low'),
+               mpatches.Patch(color=BLUE, label='Medium'),
+               mpatches.Patch(color=DARK_BLUE, label='High')]
     ax.legend(handles=patches, fontsize=7, facecolor='#F8F9FA',
-              labelcolor=PURPLE, edgecolor='#CCCCCC')
+              labelcolor=DARK_BLUE, edgecolor='#CCCCCC')
 
     plt.tight_layout()
     st.pyplot(fig)
     plt.close()
 
 st.divider()
-st.markdown(f"<p style='color:gray; font-size:12px;'>Built by Brian Parker — BS Artificial Intelligence, UNC Charlotte</p>", unsafe_allow_html=True)
+st.caption("Built by Brian Parker — BS Artificial Intelligence, UNC Charlotte")
