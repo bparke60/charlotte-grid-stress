@@ -8,6 +8,21 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import random
 
+st.set_page_config(
+    page_title="Charlotte Grid Stress Predictor",
+    page_icon="⚡",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+st.markdown("""
+    <style>
+    .stApp { background-color: #FFFFFF; }
+    h1, h2, h3, p, label, div { color: #1D1160; }
+    .stMarkdown p { color: #1D1160; }
+    </style>
+""", unsafe_allow_html=True)
+
 random.seed(42)
 np.random.seed(42)
 
@@ -71,7 +86,7 @@ def train_model():
 model, le_neighborhood, le_stress, features, df = train_model()
 
 st.markdown(f"""
-    <h1 style='color:{PURPLE}'>Charlotte Data Center Grid Stress Predictor</h1>
+    <h1 style='color:{PURPLE}'>⚡ Charlotte Data Center Grid Stress Predictor</h1>
     <p style='color:{TEAL}; font-size:18px;'>Adjust the inputs below to see how a proposed data center would impact Charlotte's power grid in real time.</p>
     <p style='font-size:13px; color:gray;'>Dataset is synthetically generated using real-world grid engineering parameters.</p>
 """, unsafe_allow_html=True)
@@ -104,14 +119,14 @@ proba = model.predict_proba(input_data)[0]
 confidence = max(proba) * 100
 
 if stress_label == "High":
-    st.markdown(f"<h2 style='color:{LIGHT_BLUE}'>HIGH Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
-    st.info("This proposal would likely place significant strain on Charlotte's power grid and may require major infrastructure upgrades before approval.")
+    st.markdown(f"<h2 style='color:{LIGHT_BLUE}'>🔴 HIGH Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
+    st.error("This proposal would likely place significant strain on Charlotte's power grid and may require major infrastructure upgrades before approval.")
 elif stress_label == "Medium":
-    st.markdown(f"<h2 style='color:{TEAL}'>MEDIUM Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
-    st.info("This proposal would place moderate strain on the grid. Further engineering review is recommended.")
+    st.markdown(f"<h2 style='color:{TEAL}'>🟡 MEDIUM Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
+    st.warning("This proposal would place moderate strain on the grid. Further engineering review is recommended.")
 else:
-    st.markdown(f"<h2 style='color:{LIGHT_TEAL}'>LOW Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
-    st.info("This proposal appears manageable for the existing grid infrastructure in this area.")
+    st.markdown(f"<h2 style='color:{LIGHT_TEAL}'>🟢 LOW Grid Stress — {confidence:.1f}% confidence</h2>", unsafe_allow_html=True)
+    st.success("This proposal appears manageable for the existing grid infrastructure in this area.")
 
 st.divider()
 
@@ -131,26 +146,26 @@ with col4:
     dot_colors = [dot_color_map[s] for s in df['grid_stress_level']]
 
     fig, ax = plt.subplots(figsize=(5, 3.5))
-    fig.patch.set_facecolor('#0a0a0a')
-    ax.set_facecolor('#0a0a0a')
+    fig.patch.set_facecolor('#F8F9FA')
+    ax.set_facecolor('#F8F9FA')
 
     ax.scatter(df['data_center_size_mw'], df['existing_grid_load_pct'],
                c=dot_colors, alpha=0.4, s=20)
 
-    ax.scatter(size_mw, grid_load, color=WHITE, s=150, zorder=5,
+    ax.scatter(size_mw, grid_load, color=PURPLE, s=150, zorder=5,
                edgecolors=LIGHT_TEAL, linewidths=2)
 
-    ax.set_xlabel('Data Center Size (MW)', color=SILVER, fontsize=9)
-    ax.set_ylabel('Grid Load (%)', color=SILVER, fontsize=9)
-    ax.tick_params(colors=SILVER, labelsize=8)
+    ax.set_xlabel('Data Center Size (MW)', color=PURPLE, fontsize=9)
+    ax.set_ylabel('Grid Load (%)', color=PURPLE, fontsize=9)
+    ax.tick_params(colors=PURPLE, labelsize=8)
     for spine in ax.spines.values():
-        spine.set_edgecolor('#333333')
+        spine.set_edgecolor('#CCCCCC')
 
     patches = [mpatches.Patch(color=LIGHT_TEAL, label='Low'),
                mpatches.Patch(color=TEAL, label='Medium'),
                mpatches.Patch(color=LIGHT_BLUE, label='High')]
-    ax.legend(handles=patches, fontsize=7, facecolor='#1a1a1a',
-              labelcolor=SILVER, edgecolor='#333333')
+    ax.legend(handles=patches, fontsize=7, facecolor='#F8F9FA',
+              labelcolor=PURPLE, edgecolor='#CCCCCC')
 
     plt.tight_layout()
     st.pyplot(fig)
