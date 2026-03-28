@@ -2,6 +2,8 @@
 
 A machine learning web app that predicts how much strain a proposed data center would place on Charlotte's power grid — built in response to the real and ongoing debate over AI infrastructure expansion in the Charlotte metro area.
 
+🔗 **Live App:** https://charlotte-grid-stress.streamlit.app
+
 ## Why I Built This
 
 Charlotte is currently at the center of a national conversation about AI data centers. Duke Energy has projected that electricity demand will grow 8x faster over the next 15 years, largely driven by AI infrastructure. Neighborhoods like East Charlotte and Matthews have already seen proposed data centers face community opposition over grid capacity concerns.
@@ -10,7 +12,8 @@ I wanted to see if machine learning could help quantify that impact before it be
 
 ## What It Does
 
-Users input the characteristics of a proposed data center:
+Users input the characteristics of a proposed data center and the app predicts grid stress level in real time — no button needed, results update as you adjust the inputs:
+
 - Neighborhood location
 - Facility size (MW)
 - Existing grid load in the area (%)
@@ -18,7 +21,7 @@ Users input the characteristics of a proposed data center:
 - Residential density
 - Number of existing data centers nearby
 
-The model returns a predicted grid stress level — **Low**, **Medium**, or **High** — along with a confidence percentage for each category.
+The model returns a predicted grid stress level — **Low**, **Medium**, or **High** — along with a live confidence breakdown and a dynamic scatter plot showing how your scenario compares to all 500 training scenarios.
 
 ## Model Performance
 
@@ -27,7 +30,8 @@ The model returns a predicted grid stress level — **Low**, **Medium**, or **Hi
 - **Training samples:** 400
 - **Test samples:** 100
 
-### Key findings
+### Key Findings
+
 The model identified existing grid load and data center size as the two strongest predictors of grid stress — accounting for over 59% of feature importance combined. Neighborhood location alone was the weakest predictor, suggesting no area is inherently safe if the grid is already strained.
 
 ## Tech Stack
@@ -37,7 +41,7 @@ The model identified existing grid load and data center size as the two stronges
 - **scikit-learn** — Random Forest model, train/test split, evaluation
 - **NumPy** — numerical operations
 - **Streamlit** — interactive web app interface
-- **matplotlib** — feature importance visualization
+- **matplotlib** — dynamic scatter plot visualization
 
 ## Dataset
 
@@ -54,9 +58,9 @@ streamlit run app.py
 ## Project Structure
 ```
 charlotte-grid-stress/
-├── app.py                      # Streamlit web app
-├── charlotte_grid_stress.ipynb # Model development notebook
-├── feature_importance.png      # Feature importance chart
+├── app.py                       # Streamlit web app + ML model
+├── charlotte_grid_stress.ipynb  # Model development notebook
+├── requirements.txt             # Dependencies
 └── README.md
 ```
 
