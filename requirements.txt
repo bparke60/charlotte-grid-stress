@@ -1,6 +1,7 @@
+streamlit
 pandas
 numpy
 scikit-learn
 matplotlib
-streamlit>=1.32.0
-jupyter
+folium
+streamlit-folium
