@@ -67,4 +67,4 @@ charlotte-grid-stress/
 ## Author
 
 Brian Parker — BS Artificial Intelligence, UNC Charlotte  
-[github.com/bparke60](https://github.com/bparke60)
+[github.com/bparke60](https://github.com/bparke60)- folium + streamlit-folium — interactive map visualization
