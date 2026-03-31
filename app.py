@@ -23,7 +23,7 @@ st.markdown("""
     h1 { font-size: 1.3rem !important; }
 }
 .metric-card {
-    color: #FFFFFF !important;
+    color: inherit !important;
     background: #F0F6FF;
     border-left: 4px solid #0085CA;
     border-radius: 6px;
