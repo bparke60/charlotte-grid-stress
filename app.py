@@ -18,19 +18,20 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+.block-container {
+    padding-top: 1.5rem !important;
+}
 @media (max-width: 768px) {
-    .block-container { padding: 1rem 0.75rem !important; }
+    .block-container { padding: 1.5rem 0.75rem 1rem 0.75rem !important; }
     h1 { font-size: 1.3rem !important; }
 }
-.metric-card {
-    color: inherit !important;
-    background: #F0F6FF;
-    border-left: 4px solid #0085CA;
-    border-radius: 6px;
-    padding: 9px 13px;
-    margin-bottom: 7px;
-    font-size: 0.88rem;
-}
+hr { margin: 0.75rem 0 !important; opacity: 0.15 !important; }
+h3 { font-weight: 600 !important; letter-spacing: 0.01em !important; }
+.stProgress > div > div { border-radius: 999px !important; }
+.stSlider label { font-size: 0.85rem !important; font-weight: 500 !important; }
+.stSelectbox label { font-size: 0.85rem !important; font-weight: 500 !important; }
+.stCaption { opacity: 0.6 !important; font-size: 0.78rem !important; }
+header[data-testid="stHeader"] { background: transparent !important; height: 0rem !important; }
 </style>
 """, unsafe_allow_html=True)
 
