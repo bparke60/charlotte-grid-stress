@@ -92,3 +92,10 @@ charlotte-grid-stress/
 
 **Brian Parker** — BS Artificial Intelligence, UNC Charlotte  
 github.com/bparke60
+
+---
+
+## License
+
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
+© 2026 Brian Parker. You may not use this project or its contents for commercial purposes.
