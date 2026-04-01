@@ -322,19 +322,19 @@ with b1:
 with b2:
     st.markdown("**Your Input Summary**")
     st.markdown(f"""
-    <div class="metric-card">📍 <b>Neighborhood:</b> {neighborhood}</div>
-    <div class="metric-card">🏗️ <b>Facility Size:</b> {size_mw} MW</div>
-    <div class="metric-card">⚡ <b>Grid Load:</b> {grid_load}%</div>
-    <div class="metric-card">📏 <b>Nearest Substation:</b> {nearest['name']} ({nearest_dist:.1f} mi)</div>
+    <div>📍 <b>Neighborhood:</b> {neighborhood}</div>
+    <div>🏗️ <b>Facility Size:</b> {size_mw} MW</div>
+    <div>⚡ <b>Grid Load:</b> {grid_load}%</div>
+    <div>📏 <b>Nearest Substation:</b> {nearest['name']} ({nearest_dist:.1f} mi)</div>
     """, unsafe_allow_html=True)
 
 with b3:
     st.markdown("**Model Info**")
     st.markdown(f"""
-    <div class="metric-card">🤖 <b>Algorithm:</b> Random Forest (100 trees)</div>
-    <div class="metric-card">🎯 <b>Test Accuracy:</b> 95%</div>
-    <div class="metric-card">📦 <b>Training Samples:</b> 400 scenarios</div>
-    <div class="metric-card">🔑 <b>Top Predictors:</b> Grid Load + Facility Size</div>
+    <div>🤖 <b>Algorithm:</b> Random Forest (100 trees)</div>
+    <div>🎯 <b>Test Accuracy:</b> 95%</div>
+    <div>📦 <b>Training Samples:</b> 400 scenarios</div>
+    <div>🔑 <b>Top Predictors:</b> Grid Load + Facility Size</div>
     """, unsafe_allow_html=True)
 
 st.divider()
