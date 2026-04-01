@@ -239,17 +239,23 @@ with map_col:
 
     st_folium(m, use_container_width=True, height=420, returned_objects=[])
 
-    st.markdown(
-        f"<div style='font-size:12px; line-height:2; margin-top:4px;'>"
-        f"<span style='color:#2ECC71'>●</span> Low stress &nbsp;"
-        f"<span style='color:#F39C12'>●</span> Medium stress &nbsp;"
-        f"<span style='color:#E74C3C'>●</span> High stress &nbsp;"
-        f"<span style='color:#FFD700; font-size:15px;'>●</span> <b>Your proposal</b> &nbsp;"
-        f"<span style='display:inline-block;width:11px;height:11px;background:#005A8E;transform:rotate(45deg);margin-bottom:-2px;'></span> Duke Energy substation"
-        f"</div>",
-        unsafe_allow_html=True
-    )
-    st.caption(f"Dashed gold line = distance to nearest substation ({nearest['name']}, {nearest_dist:.1f} mi). Click any marker for details.")
+    st.markdown("""
+<div style='margin-top:10px; font-size:13px; line-height:1.9;'>
+<b>Map Legend</b><br>
+<span style='color:#2ECC71; font-size:16px;'>●</span> &nbsp; Low grid stress &nbsp;&nbsp;
+<span style='color:#F39C12; font-size:16px;'>●</span> &nbsp; Medium grid stress &nbsp;&nbsp;
+<span style='color:#E74C3C; font-size:16px;'>●</span> &nbsp; High grid stress<br>
+<span style='color:#FFD700; font-size:16px;'>●</span> &nbsp; <b>Your proposed site</b> &nbsp;&nbsp;
+<span style='display:inline-block;width:11px;height:11px;background:#005A8E;transform:rotate(45deg);margin-bottom:-2px;'></span> &nbsp; Duke Energy substation
+</div>
+""", unsafe_allow_html=True)
+    st.markdown(f"""
+<div style='font-size:13px; line-height:1.9; margin-top:8px;'>
+<b>How to use:</b> Adjust the sliders above to move your proposed site around the map in real time.<br>
+The dashed gold line shows the distance to the nearest substation — currently <b>{nearest['name']}</b> at <b>{nearest_dist:.1f} mi</b>.<br>
+Click any marker on the map for details about that facility or substation.
+</div>
+""", unsafe_allow_html=True)
 
 with chart_col:
     st.markdown("**📈 Your Scenario vs. 500 Simulated Training Cases**")
@@ -300,12 +306,14 @@ with chart_col:
     st.pyplot(fig, use_container_width=True)
     plt.close()
 
-    st.caption(
-        "Each dot = one of 500 synthetic scenarios used to train the Random Forest model, "
-        "color-coded by predicted stress level. "
-        "X/Y axes show the two strongest predictors (59% combined feature importance). "
-        "Move any slider — the star updates instantly."
-    )
+    st.markdown("""
+<div style='font-size:13px; line-height:1.9; margin-top:8px;'>
+<b>How to read this chart:</b><br>
+Each dot represents one of 500 simulated training scenarios, color-coded by stress level.<br>
+The <span style='color:#FFD700; font-weight:bold;'>★ gold star</span> is your proposed site — it updates instantly as you move the sliders.<br>
+The X and Y axes show the two strongest predictors of grid stress, accounting for 59% of the model's decisions.
+</div>
+""", unsafe_allow_html=True)
 
 st.divider()
 st.subheader("📊 Prediction Breakdown")
