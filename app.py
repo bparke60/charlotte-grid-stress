@@ -311,7 +311,7 @@ b1, b2, b3 = st.columns(3)
 
 with b1:
     st.markdown("**Confidence by Stress Level**")
-    st.markdown("---")
+    st.markdown("<hr style='border: none; border-top: 1px solid #0085CA; margin: 4px 0 12px 0;'>", unsafe_allow_html=True)
     for label, prob in zip(le_stress.classes_, proba):
         color = STRESS_COLORS[label]
         st.markdown(
@@ -323,7 +323,7 @@ with b1:
 
 with b2:
     st.markdown("**Your Input Summary**")
-    st.markdown("---")
+    st.markdown("<hr style='border: none; border-top: 1px solid #0085CA; margin: 4px 0 12px 0;'>", unsafe_allow_html=True)
     st.markdown(f"📍 &nbsp; **Neighborhood:** &nbsp; {neighborhood}", unsafe_allow_html=True)
     st.markdown(f"🏗️ &nbsp; **Facility Size:** &nbsp; {size_mw} MW", unsafe_allow_html=True)
     st.markdown(f"⚡ &nbsp; **Grid Load:** &nbsp; {grid_load}%", unsafe_allow_html=True)
@@ -331,7 +331,7 @@ with b2:
 
 with b3:
     st.markdown("**Model Info**")
-    st.markdown("---")
+    st.markdown("<hr style='border: none; border-top: 1px solid #0085CA; margin: 4px 0 12px 0;'>", unsafe_allow_html=True)
     st.markdown("🤖 &nbsp; **Algorithm:** &nbsp; Random Forest (100 trees)", unsafe_allow_html=True)
     st.markdown("🎯 &nbsp; **Test Accuracy:** &nbsp; 95%", unsafe_allow_html=True)
     st.markdown("📦 &nbsp; **Training Samples:** &nbsp; 400 scenarios", unsafe_allow_html=True)
