@@ -32,6 +32,8 @@ h3 { font-weight: 600 !important; letter-spacing: 0.01em !important; }
 .stSelectbox label { font-size: 0.85rem !important; font-weight: 500 !important; }
 .stCaption { opacity: 0.6 !important; font-size: 0.78rem !important; }
 header[data-testid="stHeader"] { background: transparent !important; height: 0rem !important; }
+h1 a, h2 a, h3 a, h4 a { display: none !important; }
+a.anchor { display: none !important; }
 </style>
 """, unsafe_allow_html=True)
 
