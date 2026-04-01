@@ -311,6 +311,7 @@ b1, b2, b3 = st.columns(3)
 
 with b1:
     st.markdown("**Confidence by Stress Level**")
+    st.markdown("---")
     for label, prob in zip(le_stress.classes_, proba):
         color = STRESS_COLORS[label]
         st.markdown(
@@ -322,17 +323,19 @@ with b1:
 
 with b2:
     st.markdown("**Your Input Summary**")
-    st.markdown(f"📍 **Neighborhood:** {neighborhood}")
-    st.markdown(f"🏗️ **Facility Size:** {size_mw} MW")
-    st.markdown(f"⚡ **Grid Load:** {grid_load}%")
-    st.markdown(f"📏 **Nearest Substation:** {nearest['name']} ({nearest_dist:.1f} mi)")
+    st.markdown("---")
+    st.markdown(f"📍 &nbsp; **Neighborhood:** &nbsp; {neighborhood}", unsafe_allow_html=True)
+    st.markdown(f"🏗️ &nbsp; **Facility Size:** &nbsp; {size_mw} MW", unsafe_allow_html=True)
+    st.markdown(f"⚡ &nbsp; **Grid Load:** &nbsp; {grid_load}%", unsafe_allow_html=True)
+    st.markdown(f"📏 &nbsp; **Nearest Substation:** &nbsp; {nearest['name']} ({nearest_dist:.1f} mi)", unsafe_allow_html=True)
 
 with b3:
     st.markdown("**Model Info**")
-    st.markdown("🤖 **Algorithm:** Random Forest (100 trees)")
-    st.markdown("🎯 **Test Accuracy:** 95%")
-    st.markdown("📦 **Training Samples:** 400 scenarios")
-    st.markdown("🔑 **Top Predictors:** Grid Load + Facility Size")
+    st.markdown("---")
+    st.markdown("🤖 &nbsp; **Algorithm:** &nbsp; Random Forest (100 trees)", unsafe_allow_html=True)
+    st.markdown("🎯 &nbsp; **Test Accuracy:** &nbsp; 95%", unsafe_allow_html=True)
+    st.markdown("📦 &nbsp; **Training Samples:** &nbsp; 400 scenarios", unsafe_allow_html=True)
+    st.markdown("🔑 &nbsp; **Top Predictors:** &nbsp; Grid Load + Facility Size", unsafe_allow_html=True)
 
 st.divider()
 st.caption("Built by Brian Parker — BS Artificial Intelligence, UNC Charlotte · github.com/bparke60")
