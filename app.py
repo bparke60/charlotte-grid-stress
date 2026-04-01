@@ -321,21 +321,17 @@ with b1:
 
 with b2:
     st.markdown("**Your Input Summary**")
-    st.markdown(f"""
-    <div>📍 <b>Neighborhood:</b> {neighborhood}</div>
-    <div>🏗️ <b>Facility Size:</b> {size_mw} MW</div>
-    <div>⚡ <b>Grid Load:</b> {grid_load}%</div>
-    <div>📏 <b>Nearest Substation:</b> {nearest['name']} ({nearest_dist:.1f} mi)</div>
-    """, unsafe_allow_html=True)
+    st.markdown(f"📍 **Neighborhood:** {neighborhood}")
+    st.markdown(f"🏗️ **Facility Size:** {size_mw} MW")
+    st.markdown(f"⚡ **Grid Load:** {grid_load}%")
+    st.markdown(f"📏 **Nearest Substation:** {nearest['name']} ({nearest_dist:.1f} mi)")
 
 with b3:
     st.markdown("**Model Info**")
-    st.markdown(f"""
-    <div>🤖 <b>Algorithm:</b> Random Forest (100 trees)</div>
-    <div>🎯 <b>Test Accuracy:</b> 95%</div>
-    <div>📦 <b>Training Samples:</b> 400 scenarios</div>
-    <div>🔑 <b>Top Predictors:</b> Grid Load + Facility Size</div>
-    """, unsafe_allow_html=True)
+    st.markdown("🤖 **Algorithm:** Random Forest (100 trees)")
+    st.markdown("🎯 **Test Accuracy:** 95%")
+    st.markdown("📦 **Training Samples:** 400 scenarios")
+    st.markdown("🔑 **Top Predictors:** Grid Load + Facility Size")
 
 st.divider()
 st.caption("Built by Brian Parker — BS Artificial Intelligence, UNC Charlotte · github.com/bparke60")
