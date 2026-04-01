@@ -240,20 +240,23 @@ with map_col:
     st_folium(m, use_container_width=True, height=420, returned_objects=[])
 
     st.markdown("""
-<div style='margin-top:10px; font-size:13px; line-height:1.9;'>
-<b>Map Legend</b><br>
-<span style='color:#2ECC71; font-size:16px;'>●</span> &nbsp; Low grid stress &nbsp;&nbsp;
-<span style='color:#F39C12; font-size:16px;'>●</span> &nbsp; Medium grid stress &nbsp;&nbsp;
-<span style='color:#E74C3C; font-size:16px;'>●</span> &nbsp; High grid stress<br>
-<span style='color:#FFD700; font-size:16px;'>●</span> &nbsp; <b>Your proposed site</b> &nbsp;&nbsp;
-<span style='display:inline-block;width:11px;height:11px;background:#005A8E;transform:rotate(45deg);margin-bottom:-2px;'></span> &nbsp; Duke Energy substation
+<div style='margin-top:14px; font-size:14px;'>
+<b>Map Legend</b>
+<div style='margin-top:8px; display:flex; flex-direction:column; gap:8px;'>
+  <div><span style='color:#2ECC71; font-size:17px;'>●</span> &nbsp; Low grid stress</div>
+  <div><span style='color:#F39C12; font-size:17px;'>●</span> &nbsp; Medium grid stress</div>
+  <div><span style='color:#E74C3C; font-size:17px;'>●</span> &nbsp; High grid stress</div>
+  <div><span style='color:#FFD700; font-size:17px;'>●</span> &nbsp; <b>Your proposed site</b></div>
+  <div><span style='display:inline-block;width:11px;height:11px;background:#005A8E;transform:rotate(45deg);margin-bottom:-2px;'></span> &nbsp; Duke Energy substation</div>
+</div>
 </div>
 """, unsafe_allow_html=True)
     st.markdown(f"""
-<div style='font-size:13px; line-height:1.9; margin-top:8px;'>
-<b>How to use:</b> Adjust the sliders above to move your proposed site around the map in real time.<br>
-The dashed gold line shows the distance to the nearest substation — currently <b>{nearest['name']}</b> at <b>{nearest_dist:.1f} mi</b>.<br>
-Click any marker on the map for details about that facility or substation.
+<div style='font-size:14px; margin-top:14px; display:flex; flex-direction:column; gap:8px;'>
+  <div><b>How to use</b></div>
+  <div>Adjust the sliders above to move your proposed site in real time.</div>
+  <div>The dashed gold line shows distance to the nearest substation — currently <b>{nearest['name']}</b> at <b>{nearest_dist:.1f} mi</b>.</div>
+  <div>Tap any marker for details about that facility or substation.</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -307,11 +310,11 @@ with chart_col:
     plt.close()
 
     st.markdown("""
-<div style='font-size:13px; line-height:1.9; margin-top:8px;'>
-<b>How to read this chart:</b><br>
-Each dot represents one of 500 simulated training scenarios, color-coded by stress level.<br>
-The <span style='color:#FFD700; font-weight:bold;'>★ gold star</span> is your proposed site — it updates instantly as you move the sliders.<br>
-The X and Y axes show the two strongest predictors of grid stress, accounting for 59% of the model's decisions.
+<div style='font-size:14px; margin-top:14px; display:flex; flex-direction:column; gap:8px;'>
+  <div><b>How to read this chart</b></div>
+  <div>Each dot is one of 500 simulated training scenarios, color-coded by stress level.</div>
+  <div>The <span style='color:#FFD700; font-weight:bold;'>★ gold star</span> is your proposed site — updates instantly as you move the sliders.</div>
+  <div>The axes show the two strongest predictors, accounting for 59% of the model's decisions.</div>
 </div>
 """, unsafe_allow_html=True)
 
